@@ -34,7 +34,8 @@ const chalk = require('chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const bfj = require('bfj');
-const config = require('../config/webpack.config.prod');
+const loadConfig = require('../config/load-config');
+const createWebpackConfig = require('../config/webpack');
 const paths = require('../config/paths');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
@@ -109,7 +110,7 @@ checkBrowsers(paths.appPath)
 
       const appPackage = require(paths.appPackageJson);
       const publicUrl = paths.publicUrl;
-      const publicPath = config.output.publicPath;
+      const publicPath = '/';
       const buildFolder = path.relative(process.cwd(), paths.appBuild);
       printHostingInstructions(
         appPackage,
@@ -136,6 +137,8 @@ checkBrowsers(paths.appPath)
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
   console.log('Creating an optimized production build...');
+  const appConfig = loadConfig();
+  const config = createWebpackConfig({ dev: false, appConfig });
 
   let compiler = webpack(config);
   return new Promise((resolve, reject) => {
