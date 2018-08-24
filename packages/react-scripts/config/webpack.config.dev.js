@@ -225,28 +225,12 @@ module.exports = {
               {
                 loader: require.resolve('thread-loader'),
                 options: {
-                  poolTimeout: Infinity // keep workers alive for more effective watch mode
+                  poolTimeout: Infinity, // keep workers alive for more effective watch mode
                 },
               },
               {
-                loader: require.resolve('babel-loader'),
+                loader: require.resolve('./webpack/babel-loader.js'),
                 options: {
-                  // @remove-on-eject-begin
-                  babelrc: false,
-                  // @remove-on-eject-end
-                  presets: [require.resolve('babel-preset-react-app')],
-                  plugins: [
-                    [
-                      require.resolve('babel-plugin-named-asset-import'),
-                      {
-                        loaderMap: {
-                          svg: {
-                            ReactComponent: 'svgr/webpack![path]',
-                          },
-                        },
-                      },
-                    ],
-                  ],
                   // This is a feature of `babel-loader` for webpack (not Babel itself).
                   // It enables caching results in ./node_modules/.cache/babel-loader/
                   // directory for faster rebuilds.
@@ -266,7 +250,7 @@ module.exports = {
               {
                 loader: require.resolve('thread-loader'),
                 options: {
-                  poolTimeout: Infinity // keep workers alive for more effective watch mode
+                  poolTimeout: Infinity, // keep workers alive for more effective watch mode
                 },
               },
               {

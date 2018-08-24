@@ -266,24 +266,8 @@ module.exports = {
               // improves compile time on larger projects
               require.resolve('thread-loader'),
               {
-                loader: require.resolve('babel-loader'),
+                loader: require.resolve('./webpack/babel-loader.js'),
                 options: {
-                  // @remove-on-eject-begin
-                  babelrc: false,
-                  // @remove-on-eject-end
-                  presets: [require.resolve('babel-preset-react-app')],
-                  plugins: [
-                    [
-                      require.resolve('babel-plugin-named-asset-import'),
-                      {
-                        loaderMap: {
-                          svg: {
-                            ReactComponent: 'svgr/webpack![path]',
-                          },
-                        },
-                      },
-                    ],
-                  ],
                   compact: true,
                   highlightCode: true,
                 },
