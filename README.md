@@ -1,203 +1,214 @@
-# Create React App [![Build Status](https://travis-ci.org/facebook/create-react-app.svg?branch=master)](https://travis-ci.org/facebook/create-react-app)
+![](https://raw.githubusercontent.com/prichodko/create-react-app/STRV/thumbnail.gif)
 
-Create React apps with no build configuration.
+### Production ready React framework for single-page applications.
 
-- [Creating an App](#creating-an-app) – How to create a new app.
-- [User Guide](https://facebook.github.io/create-react-app/docs/folder-structure) – How to develop apps bootstrapped with Create React App.
+---
 
-Create React App works on macOS, Windows, and Linux.<br>
-If something doesn’t work, please [file an issue](https://github.com/facebook/create-react-app/issues/new).
+- [Purpose](#purpose)
+- [Setup](#setup)
+- [What is inside](#what-is-inside)
+- [Documentation](#documentation)
+- [Customizing webpack config](#customizing-webpack-config)
+- [Customizing Babel config](#customizing-babel-config)
+- [Upgrading react-scripts](#upgrading-react-scripts)
+- [Contributing](#contributing)
 
-## Quick Overview
+---
 
-```sh
-npx create-react-app my-app
-cd my-app
-npm start
+## Purpose
+
+`@strv/react-scripts` is a fork of [facebook/create-react-app](https://github.com/facebook/create-react-app), with [Next.js](https://github.com/zeit/next.js)-like custom configuration available and other goodies depending on our team's needs.
+
+Having a single toolbox allows you to focus on building and not wasting time on configuration. New features and bug fixes are available with simple a `yarn upgrade @strv/react-scripts` command and not doing it manually. Easy maintenance is especially important with increasing number of projects.
+
+### Why [facebook/create-react-app](https://github.com/facebook/create-react-app)?
+
+It's stable, maintained and battle-tested framework with awesome DX running inside of [hundred thousands](https://npm-stat.com/charts.html?package=react-scripts&from=2018-08-01&to=2018-08-31) of React apps.
+
+### Why fork?
+
+It allows us to receive new features or bug fixes coming from the huge community, taking away the burden of maintainig custom setup. Having a custom fork allows us to include features according to our needs by default and potentially releasing bug fixes quicker if necessary.
+
+At the same time, it's awesome that other people from the community can benefit from our contributions ([#4964](https://github.com/facebook/create-react-app/pull/4964), [#4852](https://github.com/facebook/create-react-app/pull/4852), [#4932](https://github.com/facebook/create-react-app/pull/4932)...) back to the [facebook/create-react-app](https://github.com/facebook/create-react-app).
+
+## Setup
+
+When starting a new project, it's highly recommended to do so with [create-strv-app](https://github.com/prichodko/create-strv-app), where (not only) `@strv/react-scripts` is already included.
+
+But if you need to install it separately:
+
+```bash
+yarn add @strv/react-scripts react react-dom
 ```
 
-_([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f))_
+and add scripts to your `package.json`:
 
-Then open [http://localhost:3000/](http://localhost:3000/) to see your app.<br>
-When you’re ready to deploy to production, create a minified bundle with `npm run build`.
-
-<p align='center'>
-<img src='https://cdn.rawgit.com/facebook/create-react-app/27b42ac/screencast.svg' width='600' alt='npm start'>
-</p>
-
-### Get Started Immediately
-
-You **don’t** need to install or configure tools like Webpack or Babel.<br>
-They are preconfigured and hidden so that you can focus on the code.
-
-Just create a project, and you’re good to go.
-
-## Creating an App
-
-**You’ll need to have Node 8.10.0 or later on your local development machine** (but it’s not required on the server). You can use [nvm](https://github.com/creationix/nvm#installation) (macOS/Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows#node-version-manager-nvm-for-windows) to easily switch Node versions between different projects.
-
-To create a new app, you may choose one of the following methods:
-
-### npx
-
-```sh
-npx create-react-app my-app
+```bash
+{
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "analyze": "react-scripts analyze"
+    "test": "react-scripts test --env=jsdom"
+  }
+}
 ```
 
-_([npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f))_
+If you are already using [facebook/create-react-app](https://github.com/facebook/create-react-app) it should be a drop-in replacement.
 
-### npm
+## What is inside
 
-```sh
-npm init react-app my-app
+STRV `react-scripts` is packed with latest tech to achieve awesome DX and build highly performant apps:
+
+- webpack 4
+- Babel 7
+- `analyze` command
+- Flow Just Works™
+- _Soon: TypeScript Just Works™_
+
+### Available commands
+
+To start a development server:
+
+```bash
+react-scripts start
 ```
 
-_`npm init <initializer>` is available in npm 6+_
+To build the app for production:
 
-### Yarn
-
-```sh
-yarn create react-app my-app
+```bash
+react-scripts build
 ```
 
-_`yarn create` is available in Yarn 0.25+_
+To analyze production build with [Bundle Analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer):
 
-It will create a directory called `my-app` inside the current folder.<br>
-Inside that directory, it will generate the initial project structure and install the transitive dependencies:
-
-```
-my-app
-├── README.md
-├── node_modules
-├── package.json
-├── .gitignore
-├── public
-│   ├── favicon.ico
-│   ├── index.html
-│   └── manifest.json
-└── src
-    ├── App.css
-    ├── App.js
-    ├── App.test.js
-    ├── index.css
-    ├── index.js
-    ├── logo.svg
-    └── serviceWorker.js
+```bash
+react-scripts analyze
 ```
 
-No configuration or complicated folder structures, just the files you need to build your app.<br>
-Once the installation is done, you can open your project folder:
+To run tests:
 
-```sh
-cd my-app
+```bash
+react-scripts test
 ```
 
-Inside the newly created project, you can run some built-in commands:
+## Documentation
 
-### `npm start` or `yarn start`
+See an official [documentation](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
-Runs the app in development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Customizing webpack config
 
-The page will automatically reload if you make changes to the code.<br>
-You will see the build errors and lint warnings in the console.
+In order to extend `webpack` config, create a `app.config.js` file at the root of your app and define `webpack` transform function.
 
-<p align='center'>
-<img src='https://cdn.rawgit.com/marionebl/create-react-app/9f62826/screencast-error.svg' width='600' alt='Build errors'>
-</p>
+Example of modified `webpack` config file:
 
-### `npm test` or `yarn test`
+```js
+// app.config.js is not transformed by Babel. So you can only use javascript features supported by your version of Node.js.
 
-Runs the test watcher in an interactive mode.<br>
-By default, runs tests related to files changed since the last commit.
+module.exports = {
+  webpack: (config, { dev }) => {
+    if (dev) {
+      // modify config used for development
+    } else {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        react: 'preact-compat',
+        'react-dom': 'preact-compat',
+      };
+    }
 
-[Read more about testing.](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#running-tests)
+    return config; // return the modified config
+  },
+  devServer: config => {
+    // modify config used for webpack-dev-server
+    return config;
+  },
+};
+```
 
-### `npm run build` or `yarn build`
+> You usually shouldn't need to modify configuration, maybe it's something what should be included by default?
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Customizing Babel config
 
-The build is minified and the filenames include the hashes.<br>
+In order to extend [internal](https://github.com/prichodko/create-react-app/blob/STRV/packages/babel-preset-react-app/create.js#L41) Babel config, simply specify a `.babelrc` / `.babelrc.js` / `babel.config.js` at the root of your app. This file is optional, but when it exists, it's considered as the _source of truth_. This is the reason why you have to include `@strv/react-scripts/babel` at the top.
 
-Your app is ready to be deployed.
+This is designed so that you are not surprised by modifications made to the babel configurations.
 
-## User Guide
+Example of extended Babel config file:
 
-You can find detailed instructions on using Create React App and many tips in [its documentation](https://facebook.github.io/create-react-app/).
+```json
+{
+  "presets": ["@strv/react-scripts/babel"],
+  "plugins": ["babel-plugin-styled-components"]
+}
+```
 
-## How to Update to New Versions?
+`@strv/react-scripts` Babel preset currently includes:
 
-Please refer to the [User Guide](https://facebook.github.io/create-react-app/docs/updating-to-new-releases) for this and other information.
+- `@babel/preset-env`
+- `@babel/preset-react`
+- `@babel/plugin-transform-destructuring`
+- `@babel/plugin-proposal-class-properties`
+- `@babel/plugin-proposal-object-rest-spread`
+- `@babel/plugin-transform-runtime`
+- `@babel/plugin-transform-regenerator`
+- `babel-plugin-transform-react-remove-prop-types`
+- `@babel/plugin-syntax-dynamic-import`
+- `babel-plugin-macros`
 
-## Philosophy
+> To see configuration in detail you can inspect the [preset](https://github.com/prichodko/create-react-app/blob/STRV/packages/babel-preset-react-app/create.js#L41) by yourself.
 
-- **One Dependency:** There is just one build dependency. It uses Webpack, Babel, ESLint, and other amazing projects, but provides a cohesive curated experience on top of them.
+## Upgrading react-scripts
 
-- **No Configuration Required:** You don't need to configure anything. Reasonably good configuration of both development and production builds is handled for you so you can focus on writing code.
+`@strv/react-scripts` has a [Backstroke](https://backstroke.co/) app set up. So whenever there is a new release of [facebook/create-react-app](https://github.com/facebook/create-react-app) a pull request on this repo will be created. Our scripts are based on `next` branch.
 
-- **No Lock-In:** You can “eject” to a custom setup at any time. Run a single command, and all the configuration and build dependencies will be moved directly into your project, so you can pick up right where you left off.
+To incroporate `upstream` changes, please follow these steps:
 
-## What’s Included?
+1. Merge the pull request. There **shouldn't** be any conflicts.
+2. Pull your changes locally.
+3. **Rebase** our modifications on top of theirs and resolve potential conflicts. This will make sure that our changes are always on top and compatible.
 
-Your environment will have everything you need to build a modern single-page React app:
+```bash
+git checkout STRV
+git rebase next
+```
 
-- React, JSX, ES6, TypeScript and Flow syntax support.
-- Language extras beyond ES6 like the object spread operator.
-- Autoprefixed CSS, so you don’t need `-webkit-` or other prefixes.
-- A fast interactive unit test runner with built-in support for coverage reporting.
-- A live development server that warns about common mistakes.
-- A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.
-- An offline-first [service worker](https://developers.google.com/web/fundamentals/getting-started/primers/service-workers) and a [web app manifest](https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/), meeting all the [Progressive Web App](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#making-a-progressive-web-app) criteria. (_Note: Using the service worker is opt-in as of `react-scripts@2.0.0` and higher_)
-- Hassle-free updates for the above tools with a single dependency.
+4. Publish the new version
 
-Check out [this guide](https://github.com/nitishdayal/cra_closer_look) for an overview of how these tools fit together.
+```bash
+yarn publish
+```
 
-The tradeoff is that **these tools are preconfigured to work in a specific way**. If your project needs more customization, you can ["eject"](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#npm-run-eject) and customize it, but then you will need to maintain this configuration.
+or
 
-## Popular Alternatives
+```bash
+npm publish
+```
 
-Create React App is a great fit for:
+5. Force push new changes to the remote
 
-- **Learning React** in a comfortable and feature-rich development environment.
-- **Starting new single-page React applications.**
-- **Creating examples** with React for your libraries and components.
+```bash
+git push origin -f STRV
+```
 
-Here’s a few common cases where you might want to try something else:
+### Troubleshooting
 
-- If you want to **try React** without hundreds of transitive build tool dependencies, consider [using a single HTML file or an online sandbox instead](https://reactjs.org/docs/try-react.html).
+Since we are force pushing, your `git pull` could fail. Run these commands to get the latest changes:
 
-- If you need to **integrate React code with a server-side template framework** like Rails or Django, or if you’re **not building a single-page app**, consider using [nwb](https://github.com/insin/nwb), or [Neutrino](https://neutrino.js.org/) which are more flexible. For Rails specifically, you can use [Rails Webpacker](https://github.com/rails/webpacker).
-
-- If you need to **publish a React component**, [nwb](https://github.com/insin/nwb) can [also do this](https://github.com/insin/nwb#react-components-and-libraries), as well as [Neutrino's react-components preset](https://neutrino.js.org/packages/react-components/).
-
-- If you want to do **server rendering** with React and Node.js, check out [Next.js](https://github.com/zeit/next.js/) or [Razzle](https://github.com/jaredpalmer/razzle). Create React App is agnostic of the backend, and just produces static HTML/JS/CSS bundles.
-
-- If your website is **mostly static** (for example, a portfolio or a blog), consider using [Gatsby](https://www.gatsbyjs.org/) instead. Unlike Create React App, it pre-renders the website into HTML at the build time.
-
-- Finally, if you need **more customization**, check out [Neutrino](https://neutrino.js.org/) and its [React preset](https://neutrino.js.org/packages/react/).
-
-All of the above tools can work with little to no configuration.
-
-If you prefer configuring the build yourself, [follow this guide](https://reactjs.org/docs/add-react-to-an-existing-app.html).
+```bash
+git checkout STRV
+git fetch origin
+git reset --hard origin/STRV
+```
 
 ## Contributing
 
-We'd love to have your helping hand on `create-react-app`! See [CONTRIBUTING.md](CONTRIBUTING.md) for more information on what we're looking for and how to get started.
-
-## React Native
-
-Looking for something similar, but for React Native?<br>
-Check out [Create React Native App](https://github.com/react-community/create-react-native-app/).
+If you have any ideas what could be included by default, open an issue.
 
 ## Acknowledgements
 
-We are grateful to the authors of existing related projects for their ideas and collaboration:
+We are thankful for tremendous work of almost 500 contributors done on [facebook/create-react-app](https://github.com/facebook/create-react-app/graphs/contributors).
 
-- [@eanplatter](https://github.com/eanplatter)
-- [@insin](https://github.com/insin)
-- [@mxstbr](https://github.com/mxstbr)
+## Maintainers
 
-## License
-
-Create React App is open source software [licensed as MIT](https://github.com/facebook/create-react-app/blob/master/LICENSE).
+- Pavel Prichodko ([@prchdk](https://twitter.com/prchdk)) - [STRV](https://www.strv.com)
