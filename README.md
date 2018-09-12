@@ -4,39 +4,47 @@
 
 ---
 
-- [Purpose](#purpose)
-- [Setup](#setup)
-- [What is inside](#what-is-inside)
-- [Documentation](#documentation)
-- [Customizing webpack config](#customizing-webpack-config)
-- [Customizing Babel config](#customizing-babel-config)
-- [Upgrading react-scripts](#upgrading-react-scripts)
-- [Contributing](#contributing)
+* [Purpose](#purpose)
+* [Setup](#setup)
+* [What is inside](#what-is-inside)
+* [Documentation](#documentation)
+* [Using TypeScript](#using-typescript)
+* [Using Flow](#using-flow)
+* [Customizing webpack config](#customizing-webpack-config)
+* [Customizing Babel config](#customizing-babel-config)
+* [Upgrading react-scripts](#upgrading-react-scripts)
+* [Contributing](#contributing)
 
 ---
 
 ## Purpose
+
 `@strv/react-scripts` is a fork of [facebook/create-react-app](https://github.com/facebook/create-react-app), with [Next.js](https://github.com/zeit/next.js)-like custom configuration available and other goodies depending on our team's needs.
 
 Having a single toolbox allows us to focus on building and not wasting time on configuration. New features and bug fixes are available with simple a `yarn upgrade @strv/react-scripts` command and not doing it manually. Easy maintenance is especially important with increasing number of projects.
 
 ### Why [facebook/create-react-app](https://github.com/facebook/create-react-app)?
+
 It's stable, maintained and battle-tested framework with awesome DX running inside of [hundred thousands](https://npm-stat.com/charts.html?package=react-scripts&from=2018-08-01&to=2018-08-31) of React apps.
 
 ### Why fork?
+
 It allows us to receive new features or bug fixes coming from the huge community, taking away the burden of maintainig custom setup. Having a custom fork allows us to include features according to our needs by default and potentially releasing bug fixes quicker if necessary.
 
 At the same time, it's awesome that other people from the community can benefit from our contributions ([#4964](https://github.com/facebook/create-react-app/pull/4964), [#4852](https://github.com/facebook/create-react-app/pull/4852), [#4932](https://github.com/facebook/create-react-app/pull/4932)...) back to the [facebook/create-react-app](https://github.com/facebook/create-react-app).
 
 ## Setup
+
 When starting a new project, it's highly recommended to do so with [create-strv-app](https://github.com/prichodko/create-strv-app), where (not only) `@strv/react-scripts` is already included.
 
 But if you need to install it separately:
+
 ```bash
 yarn add @strv/react-scripts react react-dom
 ```
 
 and add scripts to your `package.json`:
+
 ```bash
 {
   "scripts": {
@@ -51,40 +59,135 @@ and add scripts to your `package.json`:
 If you are already using [facebook/create-react-app](https://github.com/facebook/create-react-app) it should be a drop-in replacement.
 
 ## What is inside
-STRV `react-scripts` is packed with latest tech to achieve awesome DX and build highly performant apps:
 
-- webpack 4
-- Babel 7
-- `analyze` command
-- Flow Just Works™
-- *Soon: TypeScript Just Works™*
+`@strv/react-scripts` is packed with latest tech to achieve awesome DX and build highly performant apps:
+
+* webpack 4
+* Babel 7
+* `analyze` command
+* TypeScript Just Works™
+* Flow Just Works™
 
 ### Available commands
 
 To start a development server:
+
 ```bash
 react-scripts start
 ```
 
 To build the app for production:
+
 ```bash
 react-scripts build
 ```
 
 To analyze production build with [Bundle Analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer):
+
 ```bash
 react-scripts analyze
 ```
 
 To run tests:
+
 ```bash
 react-scripts test
 ```
 
 ## Documentation
+
 See an official [documentation](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md).
 
+## Using TypeScript
+
+TypeScript works with `@strv/react-scripts` out of the box. To enable it for your project, follow these steps:
+
+Add TypeScript compiler:
+```bash
+yarn add -D typescript
+```
+
+Add `tsc` command to `scripts` section in `package.json`:
+```json
+"scripts": {
+  "type-check": "tsc"
+}
+```
+
+Add `tsconfig.json` file in the root directory:
+```js
+{
+  "compilerOptions": {
+    // Target latest version of ECMAScript.
+    "target": "esnext",
+    // Search under node_modules for non-relative imports.
+    "moduleResolution": "node",
+    // Process & infer types from .js files.
+    "allowJs": true,
+    // Don't emit; allow Babel to transform files.
+    "noEmit": true,
+    // Enable strictest settings like strictNullChecks & noImplicitAny.
+    "strict": true,
+    // Disallow features that require cross-file information for emit.
+    "isolatedModules": true,
+    // Import non-ES modules as default imports.
+    "esModuleInterop": true,
+    // Allow default imports from modules with no default export
+    "allowSyntheticDefaultImports": true,
+    // Support for JSX in .tsx files
+    "jsx": "react"
+    // Folders whose combined content represents the structure of the project at runtime
+    "rootDirs": ["src"],
+    // Base directory to resolve non-relative module names
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/*"]
+    },
+    // Folders to include type definitions from
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ],
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
+That's it! Now you can run `yarn type-check` or `yarn type-check -w` for a watch mode to check your project for type errors. Optionally, but we higly recommend it, is to use code editor like [VSCode](https://code.visualstudio.com/) which does it for you and adds great experience to it.
+
+To learn more about TypeScript, check out its [documentation](https://www.typescriptlang.org/docs/home.html) or this React/TypeScript [cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet).
+
+To learn more about how do Babel and TypeScript work together I recommend reading this [blogpost](https://blogs.msdn.microsoft.com/typescript/2018/08/27/typescript-and-babel-7/).
+
+## Using Flow
+
+Flow works with `@strv/react-scripts` out of the box. To enable it for your project, follow these steps:
+
+Add Flow compiler:
+```bash
+yarn add -D flow-bin
+```
+
+Add `flow` command to `scripts` section in `package.json`:
+```json
+"scripts": {
+  "flow": "flow"
+}
+```
+
+Create `.flowconfig` in the root directory with:
+```bash
+yarn flow init
+```
+
+That's it! Now just add `// @flow` to any files you want to type check and run `yarn flow` to check the files for type errors. You can optionally use an IDE like Nuclide for a better integrated experience.
+
+To learn more about Flow, check out its [documentation](https://flow.org).
+
 ## Customizing webpack config
+
 In order to extend `webpack` config, create a `app.config.js` file at the root of your app and define `webpack` transform function.
 
 Example of modified `webpack` config file:
@@ -99,22 +202,24 @@ module.exports = {
     } else {
       config.resolve.alias = {
         ...config.resolve.alias,
-        react: 'preact-compat',
-        'react-dom': 'preact-compat'
-      }
+        react: "preact-compat",
+        "react-dom": "preact-compat"
+      };
     }
 
-    return config // return the modified config
+    return config; // return the modified config
   },
   devServer: config => {
     // modify config used for webpack-dev-server
-    return config
+    return config;
   }
-}
+};
 ```
+
 > You usually shouldn't need to modify configuration, maybe it's something what should be included by default?
 
 ## Customizing Babel config
+
 In order to extend [internal](https://github.com/prichodko/create-react-app/blob/STRV/packages/babel-preset-react-app/create.js#L41) Babel config, simply specify a `.babelrc` / `.babelrc.js` / `babel.config.js` at the root of your app. This file is optional, but when it exists, it's considered as the _source of truth_. This is the reason why you have to include `@strv/react-scripts/babel` at the top.
 
 This is designed so that you are not surprised by modifications made to the babel configurations.
@@ -123,56 +228,63 @@ Example of extended Babel config file:
 
 ```json
 {
-  "presets": [
-    "@strv/react-scripts/babel"
-  ],
-  "plugins": [
-    "babel-plugin-styled-components"
-  ]
+  "presets": ["@strv/react-scripts/babel"],
+  "plugins": ["babel-plugin-styled-components"]
 }
 ```
 
 `@strv/react-scripts` Babel preset currently includes:
-- `@babel/preset-env`
-- `@babel/preset-react`
-- `@babel/plugin-transform-destructuring`
-- `@babel/plugin-proposal-class-properties`
-- `@babel/plugin-proposal-object-rest-spread`
-- `@babel/plugin-transform-runtime`
-- `@babel/plugin-transform-regenerator`
-- `babel-plugin-transform-react-remove-prop-types`
-- `@babel/plugin-syntax-dynamic-import`
-- `babel-plugin-macros`
+
+* `@babel/preset-env`
+* `@babel/preset-react`
+* `@babel/plugin-transform-destructuring`
+* `@babel/plugin-proposal-class-properties`
+* `@babel/plugin-proposal-object-rest-spread`
+* `@babel/plugin-transform-runtime`
+* `@babel/plugin-transform-regenerator`
+* `babel-plugin-transform-react-remove-prop-types`
+* `@babel/plugin-syntax-dynamic-import`
+* `babel-plugin-macros`
 
 > To see configuration in detail you can inspect the [preset](https://github.com/prichodko/create-react-app/blob/STRV/packages/babel-preset-react-app/create.js#L41) by yourself.
 
 ## Upgrading react-scripts
+
 `@strv/react-scripts` has a [Backstroke](https://backstroke.co/) app set up. So whenever there is a new release of [facebook/create-react-app](https://github.com/facebook/create-react-app) a pull request on this repo will be created. Our scripts are based on `next` branch.
 
 To incroporate `upstream` changes, please follow these steps:
 
-1. Merge the pull request. There **shouldn't** be any conflicts.
-2. Pull your changes locally.
-3. **Rebase** our modifications on top of theirs and resolve potential conflicts. This will make sure that our changes are always on top and compatible.
+1.  Merge the pull request. There **shouldn't** be any conflicts.
+2.  Pull your changes locally.
+3.  **Rebase** our modifications on top of theirs and resolve potential conflicts. This will make sure that our changes are always on top and compatible.
+
 ```bash
 git checkout STRV
 git rebase next
 ```
-4. Publish the new version
+
+4.  Publish the new version
+
 ```bash
 yarn publish
 ```
-  or
+
+or
+
 ```bash
 npm publish
 ```
-5. Force push new changes to the remote
+
+5.  Force push new changes to the remote
+
 ```bash
 git push origin -f STRV
 ```
 
 ### Troubleshooting
+
 Since we are force pushing, your `git pull` could fail. Run these commands to get the latest changes:
+
 ```bash
 git checkout STRV
 git fetch origin
@@ -180,11 +292,13 @@ git reset --hard origin/STRV
 ```
 
 ## Contributing
+
 If you have any ideas what could be included by default, open an issue.
 
 ## Acknowledgements
-We are thankful for tremendous work of almost 500 contributors done on [facebook/create-react-app](https://github.com/facebook/create-react-app/graphs/contributors). 
 
+We are thankful for tremendous work of almost 500 contributors done on [facebook/create-react-app](https://github.com/facebook/create-react-app/graphs/contributors).
 
 ## Maintainers
-- Pavel Prichodko ([@prchdk](https://twitter.com/prchdk)) - [STRV](https://www.strv.com)
+
+* Pavel Prichodko ([@prchdk](https://twitter.com/prchdk)) - [STRV](https://www.strv.com)
