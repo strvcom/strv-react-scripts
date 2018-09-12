@@ -18,9 +18,12 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const ManifestPlugin = require('webpack-manifest-plugin');
+
+const fs = require('fs-extra');
+
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
-const ManifestPlugin = require('webpack-manifest-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -31,6 +34,16 @@ const publicPath = '/';
 const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
+
+// check for existing type-checker config files
+const hasFlow = fs.existsSync(paths.appFlowConfig);
+const hasTypeScript = fs.existsSync(paths.appTSConfig);
+
+if (hasFlow && hasTypeScript) {
+  throw new Error(
+    'Your project should contain only either Flow or TypeScript.'
+  );
+}
 
 // style files regexes
 const cssRegex = /\.css$/;
@@ -96,7 +109,7 @@ module.exports = {
     // require.resolve('webpack/hot/dev-server'),
     require.resolve('react-dev-utils/webpackHotDevClient'),
     // Finally, this is your app's code:
-    paths.appIndexJs,
+    paths.appIndex,
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
@@ -143,7 +156,16 @@ module.exports = {
     // https://github.com/facebook/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: [
+      '.web.js',
+      '.mjs',
+      '.js',
+      '.json',
+      '.web.jsx',
+      '.jsx',
+      '.ts',
+      '.tsx',
+    ],
     alias: {
       // @remove-on-eject-begin
       // Resolve Babel runtime relative to react-scripts.
@@ -216,7 +238,7 @@ module.exports = {
           // Process application JS with Babel.
           // The preset includes JSX, Flow, and some ESnext features.
           {
-            test: /\.(js|jsx|mjs)$/,
+            test: /\.(js|jsx|mjs|ts|tsx)$/,
             include: paths.srcPaths,
             exclude: [/[/\\\\]node_modules[/\\\\]/],
             use: [
@@ -236,6 +258,8 @@ module.exports = {
                   // directory for faster rebuilds.
                   cacheDirectory: true,
                   highlightCode: true,
+                  flow: hasFlow,
+                  typescript: hasTypeScript,
                 },
               },
             ],
@@ -328,7 +352,7 @@ module.exports = {
             // its runtime that would otherwise be processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|jsx|mjs|ts|tsx)$/, /\.html$/, /\.json$/],
             loader: require.resolve('file-loader'),
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
