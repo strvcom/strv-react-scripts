@@ -46,7 +46,7 @@ const createWebpackConfig = require('../config/webpack');
 const createDevServerConfig = require('../config/webpackDevServer.config');
 
 // Warn and crash if required files are missing
-if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
+if (!checkRequiredFiles([paths.appHtml, paths.appIndex])) {
   process.exit(1);
 }
 

@@ -22,6 +22,9 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+
+const fs = require('fs-extra');
+
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
@@ -43,6 +46,16 @@ const env = getClientEnvironment(publicUrl);
 // Development builds of React are slow and not intended for production.
 if (env.stringified['process.env'].NODE_ENV !== '"production"') {
   throw new Error('Production builds must have NODE_ENV=production.');
+}
+
+// check for existing type-checker config files
+const hasFlow = fs.existsSync(paths.appFlowConfig);
+const hasTypeScript = fs.existsSync(paths.appTSConfig);
+
+if (hasFlow && hasTypeScript) {
+  throw new Error(
+    'Your project should contain only either Flow or TypeScript.'
+  );
 }
 
 // style files regexes
@@ -100,7 +113,7 @@ module.exports = {
   // You can exclude the *.map files from the build during deployment.
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
-  entry: [require.resolve('./polyfills'), paths.appIndexJs],
+  entry: [require.resolve('./polyfills'), paths.appIndex],
   output: {
     // The build folder.
     path: paths.appBuild,
@@ -184,7 +197,16 @@ module.exports = {
     // https://github.com/facebook/create-react-app/issues/290
     // `web` extension prefixes have been added for better support
     // for React Native Web.
-    extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
+    extensions: [
+      '.web.js',
+      '.mjs',
+      '.js',
+      '.json',
+      '.web.jsx',
+      '.jsx',
+      '.ts',
+      '.tsx',
+    ],
     alias: {
       // @remove-on-eject-begin
       // Resolve Babel runtime relative to react-scripts.
@@ -258,7 +280,7 @@ module.exports = {
           // Process application JS with Babel.
           // The preset includes JSX, Flow, and some ESnext features.
           {
-            test: /\.(js|jsx|mjs)$/,
+            test: /\.(js|jsx|mjs|ts|tsx)$/,
             include: paths.srcPaths,
             exclude: [/[/\\\\]node_modules[/\\\\]/],
             use: [
@@ -268,6 +290,8 @@ module.exports = {
               {
                 loader: require.resolve('./webpack/babel-loader.js'),
                 options: {
+                  flow: hasFlow,
+                  typescript: hasTypeScript,
                   compact: true,
                   highlightCode: true,
                 },
@@ -365,7 +389,7 @@ module.exports = {
             // it's runtime that would otherwise be processed through "file" loader.
             // Also exclude `html` and `json` extensions so they get processed
             // by webpacks internal loaders.
-            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|jsx|mjs|ts|tsx)$/, /\.html$/, /\.json$/],
             options: {
               name: 'static/media/[name].[hash:8].[ext]',
             },
