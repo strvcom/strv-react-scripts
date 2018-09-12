@@ -8,6 +8,8 @@
 - [Setup](#setup)
 - [What is inside](#what-is-inside)
 - [Documentation](#documentation)
+- [Using TypeScript](#using-typescript)
+- [Using Flow](#using-flow)
 - [Customizing webpack config](#customizing-webpack-config)
 - [Customizing Babel config](#customizing-babel-config)
 - [Upgrading react-scripts](#upgrading-react-scripts)
@@ -95,6 +97,100 @@ react-scripts test
 ## Documentation
 
 See an official [documentation](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md).
+
+## Using TypeScript
+
+TypeScript works with `@strv/react-scripts` out of the box. To enable it for your project, follow these steps:
+
+Add TypeScript compiler:
+
+```bash
+yarn add -D typescript
+```
+
+Add `tsc` command to `scripts` section in `package.json`:
+
+```json
+"scripts": {
+  "type-check": "tsc"
+}
+```
+
+Add `tsconfig.json` file in the root directory:
+
+```js
+{
+  "compilerOptions": {
+    // Target latest version of ECMAScript.
+    "target": "esnext",
+    // Search under node_modules for non-relative imports.
+    "moduleResolution": "node",
+    // Process & infer types from .js files.
+    "allowJs": true,
+    // Don't emit; allow Babel to transform files.
+    "noEmit": true,
+    // Enable strictest settings like strictNullChecks & noImplicitAny.
+    "strict": true,
+    // Disallow features that require cross-file information for emit.
+    "isolatedModules": true,
+    // Import non-ES modules as default imports.
+    "esModuleInterop": true,
+    // Allow default imports from modules with no default export
+    "allowSyntheticDefaultImports": true,
+    // Support for JSX in .tsx files
+    "jsx": "react"
+    // Folders whose combined content represents the structure of the project at runtime
+    "rootDirs": ["src"],
+    // Base directory to resolve non-relative module names
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/*"]
+    },
+    // Folders to include type definitions from
+    "typeRoots": [
+      "node_modules/@types",
+      "src/types"
+    ],
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
+That's it! Now you can run `yarn type-check` or `yarn type-check -w` for a watch mode to check your project for type errors. Optionally, but we higly recommend it, is to use code editor like [VSCode](https://code.visualstudio.com/) which does it for you and adds great experience to it.
+
+To learn more about TypeScript, check out its [documentation](https://www.typescriptlang.org/docs/home.html) or this React/TypeScript [cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet).
+
+To learn more about how do Babel and TypeScript work together I recommend reading this [blogpost](https://blogs.msdn.microsoft.com/typescript/2018/08/27/typescript-and-babel-7/).
+
+## Using Flow
+
+Flow works with `@strv/react-scripts` out of the box. To enable it for your project, follow these steps:
+
+Add Flow compiler:
+
+```bash
+yarn add -D flow-bin
+```
+
+Add `flow` command to `scripts` section in `package.json`:
+
+```json
+"scripts": {
+  "flow": "flow"
+}
+```
+
+Create `.flowconfig` in the root directory with:
+
+```bash
+yarn flow init
+```
+
+That's it! Now just add `// @flow` to any files you want to type check and run `yarn flow` to check the files for type errors. You can optionally use an IDE like Nuclide for a better integrated experience.
+
+To learn more about Flow, check out its [documentation](https://flow.org).
 
 ## Customizing webpack config
 
