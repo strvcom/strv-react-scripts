@@ -1,7 +1,5 @@
-# react-scripts
+![](https://raw.githubusercontent.com/prichodko/create-react-app/STRV/thumbnail.gif)
 
-This package includes scripts and configuration used by [Create React App](https://github.com/facebook/create-react-app).<br>
-Please refer to its documentation:
+### Production ready React framework for single-page applications.
 
-- [Getting Started](https://github.com/facebook/create-react-app/blob/master/README.md#getting-started) – How to create a new app.
-- [User Guide](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md) – How to develop apps bootstrapped with Create React App.
+See [GitHub](https://github.com/strvcom/strv-react-scripts) for an offical documentation.
