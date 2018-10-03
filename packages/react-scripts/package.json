@@ -17,7 +17,8 @@
     "scripts",
     "template",
     "template-typescript",
-    "utils"
+    "utils",
+    "babel.js"
   ],
   "bin": {
     "react-scripts": "./bin/react-scripts.js"
