@@ -55,7 +55,7 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function(webpackEnv) {
+module.exports = function(webpackEnv, config) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -127,7 +127,7 @@ module.exports = function(webpackEnv) {
     return loaders;
   };
 
-  return {
+  let webpackConfig = {
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
     bail: isEnvProduction,
@@ -673,4 +673,12 @@ module.exports = function(webpackEnv) {
     // our own hints via the FileSizeReporter
     performance: false,
   };
+
+  if (typeof config.webpack === 'function') {
+    webpackConfig = config.webpack(webpackConfig, {
+      dev: webpackEnv === 'development',
+    });
+  }
+
+  return webpackConfig;
 };

@@ -35,6 +35,7 @@ const path = require('path');
 const chalk = require('react-dev-utils/chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
+const loadAppConfig = require('../config/appConfig');
 const configFactory = require('../config/webpack.config');
 const paths = require('../config/paths');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
@@ -60,7 +61,8 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 }
 
 // Generate configuration
-const config = configFactory('production');
+const appConfig = loadAppConfig();
+const config = configFactory('production', appConfig);
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
