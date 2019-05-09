@@ -3,4 +3,5 @@ build
 my-app*
 packages/react-scripts/template
 packages/react-scripts/fixtures
+packages/react-scripts/babel
 fixtures/
