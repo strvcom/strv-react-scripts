@@ -1,6 +1,6 @@
 {
   "name": "@strv/react-scripts",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Production ready React framework for single-page applications.",
   "repository": "strvcom/strv-react-scripts",
   "license": "MIT",
