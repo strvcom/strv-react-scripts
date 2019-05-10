@@ -1,0 +1,7 @@
+version: "1"
+rules:                        
+  - base: master              
+    upstream: facebook:master 
+    mergeMethod: merge        
+    reviewers:              
+      - prichodko
