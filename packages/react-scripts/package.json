@@ -1,18 +1,14 @@
 {
-  "name": "react-scripts",
-  "version": "3.0.1",
-  "description": "Configuration and scripts for Create React App.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/facebook/create-react-app.git",
-    "directory": "packages/react-scripts"
-  },
+  "name": "@strv/react-scripts",
+  "version": "2.1.1",
+  "description": "Production ready React framework for single-page applications.",
+  "repository": "strvcom/strv-react-scripts",
   "license": "MIT",
   "engines": {
     "node": ">=8.10"
   },
   "bugs": {
-    "url": "https://github.com/facebook/create-react-app/issues"
+    "url": "https://github.com/strvcom/strv-react-scripts/issues"
   },
   "files": [
     "bin",
